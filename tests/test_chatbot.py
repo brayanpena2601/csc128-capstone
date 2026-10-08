@@ -7,6 +7,24 @@ from llm import ModelReply
 
 
 class ConversationTests(unittest.TestCase):
+    def test_complete_example_is_preserved_across_slot_filling(self):
+        def forbidden(*args):
+            self.fail("The example must be displayed directly, not rewritten by Groq")
+        state = Conversation()
+        respond("Find a resource", state, generator=forbidden)
+        respond("slot filling", state, generator=forbidden)
+        answer = respond("examples", state, generator=forbidden)
+        lines = ["**User:** Find a resource.", "**Assistant:** Which topic?",
+                 "**User:** Slot filling.", "**Assistant:** Notes, instructions, or examples?",
+                 "**User:** Examples."]
+        positions = [answer.index(line) for line in lines]
+        self.assertEqual(positions, sorted(positions))
+        self.assertIn("`topic = slot filling`", answer)
+        self.assertIn("`resource_type = examples`", answer)
+        self.assertIn("[slots-example]", answer)
+        self.assertIn("Response mode: verified_source", answer)
+
+
     def test_intent_explanation_preserves_exact_names_without_model(self):
         def forbidden(*args):
             self.fail("Verified intent definitions must not be rewritten by the model")

@@ -105,4 +105,4 @@ See `docs/submission-checklist.md` for the remaining evidence.
 
 ### Verified intent definitions
 
-The intents study note is displayed directly from its source with response mode `verified_source`. This prevents model wording from renaming code identifiers or inventing resource types. Other matching records still use Groq when enabled.
+The intents study note and resource-lookup slot-filling example are displayed directly from their sources with response mode `verified_source`. This prevents model wording from renaming code identifiers, inventing resource types, or truncating the retrieved example dialogue. Other matching records still use Groq when enabled.

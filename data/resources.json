@@ -63,7 +63,8 @@
       "concept_help"
     ],
     "source": "Project-authored study example; not an official instructor lesson",
-    "text": "User: Find a resource. Assistant: Which topic? User: Slot filling. Assistant: Notes, instructions, or examples? User: Examples. The saved topic is slot filling and the saved resource_type is examples; together they identify a matching resource."
+    "text": "**Slot filling example**\n\n**User:** Find a resource.\n\n**Assistant:** Which topic?\n\n**User:** Slot filling.\n\n**Assistant:** Notes, instructions, or examples?\n\n**User:** Examples.\n\nThe assistant saves `topic = slot filling` and `resource_type = examples`. Together, these two values identify the matching resource.",
+    "response_mode": "verified_source"
   },
   {
     "id": "state-notes",
