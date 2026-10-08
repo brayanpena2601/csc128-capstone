@@ -1,0 +1,66 @@
+[
+  {
+    "id": "capstone-requirements",
+    "topic": "capstone",
+    "resource_type": "instructions",
+    "intents": ["resource_lookup", "assignment_guidance"],
+    "source": "Instructor capstone instructions supplied by student, Required capabilities and deliverables",
+    "text": "The capstone requires at least four distinct intents, at least two entities collected through slot filling, conversation state across turns, a language model for part of a response, document grounding or tool use, software disclosure, and graceful API/rate-limit failure. Deliverables are a proposal, a public Streamlit URL, a public GitHub repository, a 2–3 page design document PDF, and a recorded demo no longer than five minutes."
+  },
+  {
+    "id": "capstone-deadline",
+    "topic": "capstone",
+    "resource_type": "instructions",
+    "intents": ["course_logistics"],
+    "source": "Instructor capstone instructions supplied by student, heading and deliverables table",
+    "text": "The instructions list the project deadline as Friday, October 9 at 11:59 PM and the project value as 280 points. They do not specify a timezone. Verify the deadline and timezone in the course LMS."
+  },
+  {
+    "id": "streamlit-setup",
+    "topic": "streamlit",
+    "resource_type": "instructions",
+    "intents": ["resource_lookup", "assignment_guidance"],
+    "source": "Instructor capstone instructions supplied by student, Setup sections 2–5",
+    "text": "Place app.py at the repository root. Pin package versions in requirements.txt. Keep .streamlit/secrets.toml out of Git and verify with git check-ignore before pushing. Add the Groq key separately to the Streamlit Community Cloud Secrets panel. Verify the deployed public URL in a private browsing window."
+  },
+  {
+    "id": "intents-notes",
+    "topic": "intents",
+    "resource_type": "notes",
+    "intents": ["resource_lookup", "concept_help"],
+    "source": "Project-authored study note; not an official instructor lesson",
+    "text": "An intent describes what the user wants to accomplish. This assistant distinguishes finding resources, explaining concepts, understanding assignment requirements, and checking course logistics. A deterministic classifier uses explicit rules to select a supported intent and asks for clarification when no rule matches."
+  },
+  {
+    "id": "slots-notes",
+    "topic": "slot filling",
+    "resource_type": "notes",
+    "intents": ["resource_lookup", "concept_help"],
+    "source": "Project-authored study note; not an official instructor lesson",
+    "text": "An entity is a useful value extracted from a message, such as topic or resource type. Slot filling asks for required values that are missing and saves each answer across turns. For a resource search, this assistant asks for the topic first and then for notes, instructions, or examples."
+  },
+  {
+    "id": "slots-example",
+    "topic": "slot filling",
+    "resource_type": "examples",
+    "intents": ["resource_lookup", "concept_help"],
+    "source": "Project-authored study example; not an official instructor lesson",
+    "text": "User: Find a resource. Assistant: Which topic? User: Slot filling. Assistant: Notes, instructions, or examples? User: Examples. The saved topic is slot filling and the saved resource_type is examples; together they identify a matching resource."
+  },
+  {
+    "id": "state-notes",
+    "topic": "conversation state",
+    "resource_type": "notes",
+    "intents": ["resource_lookup", "concept_help"],
+    "source": "Project-authored study note; not an official instructor lesson",
+    "text": "Conversation state stores information needed in later turns. A message history displays earlier exchanges, while saved slots actively affect the next response. Streamlit session_state keeps this information through reruns within a browser session. Resetting a conversation clears both messages and slots."
+  },
+  {
+    "id": "grounding-notes",
+    "topic": "grounding",
+    "resource_type": "notes",
+    "intents": ["resource_lookup", "concept_help"],
+    "source": "Project-authored study note; not an official instructor lesson",
+    "text": "Document grounding retrieves relevant source material before composing an answer. The assistant should identify the source and acknowledge missing information instead of inventing facts. Grounding reduces unsupported answers but does not guarantee that a language model is always correct."
+  }
+]
