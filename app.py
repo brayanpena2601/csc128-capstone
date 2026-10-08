@@ -5,7 +5,7 @@ from chatbot import Conversation, respond
 
 st.set_page_config(page_title="CSC-128 Course Assistant", page_icon="📚")
 st.title("CSC-128 Course Assistant")
-st.info("I am a software chatbot, not your instructor. I help with CSC-128 resources, concepts, assignment requirements, and logistics.")
+st.info("I am a software chatbot. I help with CSC-128 resources, concepts, assignment requirements, and logistics.")
 st.caption("Coverage: supplied capstone instructions and labeled project study notes. Messages and selected source excerpts are sent to Groq when AI is enabled. Do not enter personal information or secrets.")
 
 
