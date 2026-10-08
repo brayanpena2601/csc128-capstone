@@ -4,7 +4,7 @@ from classifier import classify
 from entities import extract, candidates
 from guardrails import check
 from retriever import retrieve
-from llm import generate
+from llm import generate, ModelReply
 
 PROMPTS = {
     "topic": "Which CSC-128 topic: capstone, intents, slot filling, conversation state, grounding, Streamlit, or Groq?",
@@ -60,6 +60,9 @@ def respond(text: str, state: Conversation, api_key: str = "", model: str = "ope
     if not records:
         return "I do not have a verified source for that request. Check the CSC-128 LMS or ask your instructor. You can change the topic or resource type, or type reset."
     question = f"Request: {state.question}\nCurrent message: {text}\nIntent: {state.intent}\nSelected values: {state.slots}"
-    answer = generator(question, records, api_key, model)
+    if all(record.get("response_mode") == "verified_source" for record in records):
+        answer = ModelReply("\n\n".join(record["text"] for record in records), "verified_source")
+    else:
+        answer = generator(question, records, api_key, model)
     sources = "\n".join(f"- [{r['id']}] {r['source']}" for r in records)
     return f"{answer.text}\n\n**Sources**\n{sources}\n\n_Response mode: {answer.status}_"

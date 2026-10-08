@@ -102,3 +102,7 @@ Groq model reference: https://console.groq.com/docs/models
 - 2–3 page design PDF and <=5 minute recorded demo: pending.
 
 See `docs/submission-checklist.md` for the remaining evidence.
+
+### Verified intent definitions
+
+The intents study note is displayed directly from its source with response mode `verified_source`. This prevents model wording from renaming code identifiers or inventing resource types. Other matching records still use Groq when enabled.

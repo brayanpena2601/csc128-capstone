@@ -1,12 +1,27 @@
 import unittest
 from chatbot import Conversation, respond
-from classifier import classify
+from classifier import classify, INTENTS
 from entities import extract
 from retriever import retrieve
 from llm import ModelReply
 
 
 class ConversationTests(unittest.TestCase):
+    def test_intent_explanation_preserves_exact_names_without_model(self):
+        def forbidden(*args):
+            self.fail("Verified intent definitions must not be rewritten by the model")
+        for question in ("Explain intents", "Find notes about intents"):
+            with self.subTest(question=question):
+                answer = respond(question, Conversation(), generator=forbidden)
+                for intent in INTENTS:
+                    self.assertIn("**" + intent + "**", answer)
+                self.assertNotIn("assignment_help", answer)
+                self.assertNotIn("textbook", answer)
+                self.assertNotIn("lecture slide", answer)
+                self.assertIn("[intents-notes]", answer)
+                self.assertIn("Response mode: verified_source", answer)
+
+
     def test_natural_submission_phrase(self):
         self.assertEqual(classify("What do I need to turn in for capstone?"), "assignment_guidance")
 
