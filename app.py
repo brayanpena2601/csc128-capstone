@@ -15,7 +15,8 @@ def setting(name, default=""):
         return value
     try:
         return st.secrets.get(name, default)
-    except FileNotFoundError:
+    except Exception:
+        # A missing or malformed secrets file must still allow local-source use.
         return default
 
 

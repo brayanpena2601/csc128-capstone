@@ -30,6 +30,10 @@ def generate(question: str, records: list[dict], api_key: str = "",
                 {"role": "user", "content": question},
             ],
         )
+        if not response.choices:
+            return ModelReply("The language service returned no answer. Try again later. From the local sources:\n\n" + fallback, "empty")
+        if getattr(response.choices[0], "finish_reason", None) == "length":
+            return ModelReply("The language service response was cut short. Try a shorter question. From the local sources:\n\n" + fallback, "truncated")
         text = response.choices[0].message.content
         if not text or not text.strip():
             return ModelReply("The language service returned no answer. From the local sources:\n\n" + fallback, "empty")
@@ -37,4 +41,8 @@ def generate(question: str, records: list[dict], api_key: str = "",
     except RateLimitError:
         return ModelReply("The language service is busy. Try again later. From the local sources:\n\n" + fallback, "rate_limit")
     except APIError:
-        return ModelReply("The language service is unavailable. From the local sources:\n\n" + fallback, "api_error")
+        return ModelReply("The language service is unavailable. Try again later. From the local sources:\n\n" + fallback, "api_error")
+    except Exception:
+        # SDK shape changes or unexpected transport errors must not expose raw
+        # exception messages, which can contain request details or credentials.
+        return ModelReply("The language service could not complete the request. Try again later. From the local sources:\n\n" + fallback, "unexpected_error")

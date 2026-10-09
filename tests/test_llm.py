@@ -2,7 +2,7 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import Mock
 import httpx
-from groq import APIConnectionError, AuthenticationError, RateLimitError
+from groq import APIConnectionError, AuthenticationError, RateLimitError, APITimeoutError, InternalServerError
 from llm import generate
 
 RECORDS = [{"id": "test", "text": "Verified source text."}]
@@ -30,6 +30,8 @@ class ModelTests(unittest.TestCase):
             (RateLimitError("sensitive internal text", response=httpx.Response(429, request=request), body=None), "rate_limit"),
             (AuthenticationError("sensitive internal text", response=httpx.Response(401, request=request), body=None), "api_error"),
             (APIConnectionError(request=request), "api_error"),
+            (APITimeoutError(request=request), "api_error"),
+            (InternalServerError("sensitive internal text", response=httpx.Response(503, request=request), body=None), "api_error"),
         ]
         for error, status in cases:
             with self.subTest(status=status):

@@ -1,9 +1,11 @@
 """Conversation logic independent from Streamlit and the network."""
 from dataclasses import dataclass, field
+from copy import deepcopy
+import re
 from classifier import classify
 from entities import extract, candidates
 from guardrails import check
-from retriever import retrieve
+from retriever import retrieve, SourceError
 from llm import generate, ModelReply
 
 PROMPTS = {
@@ -21,6 +23,18 @@ class Conversation:
 
 
 def respond(text: str, state: Conversation, api_key: str = "", model: str = "openai/gpt-oss-20b", generator=generate) -> str:
+    # Last-resort boundary protects the page and rolls back a partially handled
+    # turn. Expected source/API failures have more specific recovery messages.
+    previous = deepcopy(state)
+    try:
+        return _respond(text, state, api_key, model, generator)
+    except Exception:
+        state.intent, state.slots = previous.intent, previous.slots
+        state.pending, state.question = previous.pending, previous.question
+        return "I could not finish that request. Please try again or reset the conversation. If this continues, check the CSC-128 LMS or contact your instructor."
+
+
+def _respond(text, state, api_key, model, generator):
     text = text.strip()
     if not text:
         return "Please enter a CSC-128 question."
@@ -38,10 +52,17 @@ def respond(text: str, state: Conversation, api_key: str = "", model: str = "ope
     found = extract(text)
     intent = classify(text)
     # A recognized answer to the requested slot takes precedence over classifier keywords.
-    slot_answer = state.pending and state.pending in found
+    explicit_request = re.search(r"\b(explain|describe|define|how|what|when|find|where|explica|buscar)\b", text.lower())
+    slot_answer = state.pending and state.pending in found and not explicit_request
     if intent and not slot_answer:
         if intent != state.intent:
+            # Carry a topic through explicit follow-ups, but drop intent-specific
+            # values so an earlier resource type cannot contaminate a new task.
+            topic = state.slots.get("topic")
+            followup = re.search(r"\b(it|its|that|this)\b", text.lower())
             state.slots.clear()
+            if topic and followup and "topic" not in found:
+                state.slots["topic"] = topic
         state.intent, state.pending, state.question = intent, None, text
     elif not slot_answer and not (state.intent and found):
         return "I only help with CSC-128. Ask me to find a resource, explain a concept, review assignment requirements, or check course logistics." + ("\n\n" + PROMPTS[state.pending] if state.pending else "")
@@ -56,7 +77,10 @@ def respond(text: str, state: Conversation, api_key: str = "", model: str = "ope
             state.pending = slot
             return PROMPTS[slot]
     state.pending = None
-    records = retrieve(state.intent, state.slots)
+    try:
+        records = retrieve(state.intent, state.slots)
+    except SourceError:
+        return "The course sources are temporarily unavailable. Please try again later or check the CSC-128 LMS. I cannot verify an answer right now."
     if not records:
         return "I do not have a verified source for that request. Check the CSC-128 LMS or ask your instructor. You can change the topic or resource type, or type reset."
     question = f"Request: {state.question}\nCurrent message: {text}\nIntent: {state.intent}\nSelected values: {state.slots}"
