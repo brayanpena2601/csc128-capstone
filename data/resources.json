@@ -8,7 +8,8 @@
       "assignment_guidance"
     ],
     "source": "Instructor capstone instructions supplied by student, Required capabilities and deliverables",
-    "text": "The capstone requires at least four distinct intents, at least two entities collected through slot filling, conversation state across turns, a language model for part of a response, document grounding or tool use, software disclosure, and graceful API/rate-limit failure. Deliverables are a proposal, a public Streamlit URL, a public GitHub repository, a 2–3 page design document PDF, and a recorded demo no longer than five minutes."
+    "text": "**Capstone requirements**\n\n**Required capabilities**\n\n- Handle at least four distinct intents.\n- Collect at least two entities through slot filling.\n- Maintain conversation state across turns.\n- Use a language model for at least part of a response.\n- Ground answers in documents or call at least one tool.\n- Disclose to the user that the chatbot is software.\n- Fail gracefully when the API is down or rate limited.\n\n**Deliverables**\n\n1. Proposal.\n2. Public Streamlit URL.\n3. Public GitHub repository.\n4. Design document PDF, 2-3 pages.\n5. Recorded demo, five minutes or less.",
+    "response_mode": "verified_source"
   },
   {
     "id": "capstone-deadline",
@@ -40,7 +41,7 @@
       "concept_help"
     ],
     "source": "Project-authored study note; not an official instructor lesson",
-    "text": "An intent describes what the user wants to accomplish. This assistant supports four intents:\n\n1. **resource_lookup**: find matching entries in the local document set.\n2. **concept_help**: explain supported chatbot concepts using retrieved notes.\n3. **assignment_guidance**: understand the recorded assignment requirements.\n4. **course_logistics**: check recorded course information, such as the capstone deadline.\n\nThe current document set contains supplied capstone instructions and project-authored study notes. The classifier uses explicit rules and asks for clarification when no rule matches.",
+    "text": "An intent describes what the user wants to accomplish. This assistant supports four intents:\n\n1. **resource_lookup**: find matching entries in the local document set. Example: \"Find notes about slot filling.\"\n2. **concept_help**: explain supported chatbot concepts using retrieved notes. Example: \"How does slot filling work?\"\n3. **assignment_guidance**: understand the recorded assignment requirements. Example: \"What is required for the capstone?\"\n4. **course_logistics**: check recorded course information. Example: \"When is the capstone due?\"\n\nThe current document set contains supplied capstone instructions and project-authored study notes. The classifier uses explicit rules and asks for clarification when no rule matches.",
     "response_mode": "verified_source"
   },
   {

@@ -107,10 +107,10 @@ See `docs/submission-checklist.md` for the remaining evidence.
 
 ### Verified intent definitions
 
-The intents study note and resource-lookup slot-filling example are displayed directly from their sources with response mode `verified_source`. This prevents model wording from renaming code identifiers, inventing resource types, or truncating the retrieved example dialogue. Other matching records still use Groq when enabled.
+The intents study note, resource-lookup slot-filling example, and capstone requirements are displayed directly from their sources with response mode `verified_source`. This prevents model wording from renaming code identifiers, inventing resource types, or truncating the retrieved example dialogue. Other matching records still use Groq when enabled.
 
 ## Reliability review
 
-The expanded suite passes 37 tests. It checks natural paraphrases, cross-intent pronoun follow-ups, SDK response shape errors, truncation, missing/corrupt sources, timeout, HTTP 503, and page-level recovery. Expected failures get specific messages; unexpected turn errors restore the previous conversation state and offer retry/reset. Raw exception text is never intentionally shown. These checks do not guarantee correctness for every possible wording or external outage.
+The expanded suite passes 39 tests. It checks natural paraphrases, cross-intent pronoun follow-ups, SDK response shape errors, truncation, missing/corrupt sources, timeout, HTTP 503, and page-level recovery. Expected failures get specific messages; unexpected turn errors restore the previous conversation state and offer retry/reset. Raw exception text is never intentionally shown. These checks do not guarantee correctness for every possible wording or external outage.
 
 After deployment, verify `What is required for the capstone?`, then `When is it due?`, and separately `How does slot filling work?` and `Explain intents with examples`. Confirm sources and response modes. Open the public URL in a fresh incognito session before submission; cloud sleep cannot be ruled out by a local test.

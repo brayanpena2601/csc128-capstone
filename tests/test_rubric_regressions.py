@@ -8,6 +8,27 @@ from llm import generate, ModelReply
 
 
 class RubricRegressionTests(unittest.TestCase):
+    def test_software_disclosure_requirement_is_exact(self):
+        def forbidden(*args):
+            self.fail("Assignment requirements must not be reinterpreted by Groq")
+        answer = respond("What is required for the capstone?", Conversation(), generator=forbidden)
+        self.assertIn("Disclose to the user that the chatbot is software", answer)
+        self.assertNotIn("license", answer.lower())
+        self.assertIn("Response mode: verified_source", answer)
+
+    def test_intent_explanation_includes_working_examples(self):
+        answer = respond("Explain intents with examples", Conversation())
+        examples = {
+            "Find notes about slot filling.": "resource_lookup",
+            "How does slot filling work?": "concept_help",
+            "What is required for the capstone?": "assignment_guidance",
+            "When is the capstone due?": "course_logistics",
+        }
+        for example, intent in examples.items():
+            with self.subTest(example=example):
+                self.assertIn(example, answer)
+                self.assertEqual(classify(example), intent)
+
     def test_assignment_paraphrases(self):
         for text in ("What is required for the capstone?", "What do I need to include in the capstone?", "Capstone checklist"):
             with self.subTest(text=text):
